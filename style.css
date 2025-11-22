@@ -120,6 +120,16 @@ h2 { font-size: 1rem; color: #ddd; }
     border: 4px solid;
 }
 
+.card-desc {
+    /* ... les propriétés existantes ... */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limite à 3 lignes */
+    -webkit-box-orient: vertical;
+    padding: 0 5px;
+}
+
 /* Rarity Colors */
 .rarity-1 { border-color: #bdc3c7; } /* Grey */
 .rarity-2 { border-color: #27ae60; } /* Green */
