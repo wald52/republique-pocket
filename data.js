@@ -5,6 +5,7 @@
 // - Budget (PV) : Budget global annuel du dispositif pour l'État
 // - Rarity : 1 (Commune), 2 (Peu Commune), 3 (Rare), 4 (Légendaire)
 
+
 const aidsDatabase = [
     // ==========================================
     // ⚪ RARETÉ 1 : AIDES COMMUNES & PONCTUELLES
