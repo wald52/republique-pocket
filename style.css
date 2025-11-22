@@ -1,0 +1,175 @@
+/* style.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a1a;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    background: linear-gradient(90deg, #002654, #C1272D); /* Bleu Blanc Rouge sombre */
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
+h2 { font-size: 1rem; color: #ddd; }
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+/* --- BOOSTER PACK --- */
+.booster-section {
+    margin: 40px 0;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.booster-pack {
+    width: 200px;
+    height: 300px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border-radius: 15px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    border: 2px solid #fff;
+}
+
+.booster-pack:hover {
+    transform: scale(1.05) rotateY(10deg);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+.booster-pack.opening {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0) rotate(1deg); }
+    20%, 80% { transform: translate3d(2px, 0, 0) rotate(-2deg); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0) rotate(3deg); }
+    40%, 60% { transform: translate3d(4px, 0, 0) rotate(-3deg); }
+}
+
+/* --- CARDS --- */
+.cards-reveal-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    perspective: 1000px;
+}
+
+.card {
+    width: 180px;
+    height: 260px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    cursor: pointer;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.card-back {
+    background: #2c3e50;
+    border: 4px solid #ecf0f1;
+    color: white;
+    font-size: 2rem;
+}
+
+.card-front {
+    background: white;
+    color: black;
+    transform: rotateY(180deg);
+    padding: 10px;
+    box-sizing: border-box;
+    border: 4px solid;
+}
+
+/* Rarity Colors */
+.rarity-1 { border-color: #bdc3c7; } /* Grey */
+.rarity-2 { border-color: #27ae60; } /* Green */
+.rarity-3 { border-color: #9b59b6; box-shadow: 0 0 15px rgba(155, 89, 182, 0.6); } /* Purple */
+.rarity-4 { border-color: #f1c40f; box-shadow: 0 0 25px rgba(241, 196, 15, 0.8); background: linear-gradient(135deg, #fff, #fef9e7); } /* Gold */
+
+.card-image { font-size: 3rem; margin-bottom: 10px; }
+.card-title { font-weight: bold; font-size: 0.9rem; text-align: center; margin-bottom: 5px; }
+.card-stats { font-size: 0.7rem; width: 100%; display: flex; justify-content: space-between; margin-top: auto; border-top: 1px solid #eee; padding-top: 5px;}
+.card-desc { font-size: 0.7rem; text-align: center; color: #555; flex-grow: 1; }
+
+/* --- COLLECTION UI --- */
+.collection-section {
+    background-color: #222;
+    width: 90%;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.collection-item {
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.5; /* Grisé si pas possédé */
+}
+
+.collection-item.owned {
+    opacity: 1;
+    background: #444;
+    border: 1px solid #fff;
+}
+
+button.btn-action {
+    background-color: #C1272D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button.btn-action:hover { background-color: #a01e23; }
