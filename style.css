@@ -229,6 +229,26 @@ h2 { font-size: 1rem; color: #ddd; }
     gap: 10px;
 }
 
+.collection-grid .card {
+    /* CRITIQUE : Réinitialise la transformation 3D pour la collection */
+    /* Empêche la distorsion et les effets de perspective non désirés */
+    transform: none !important; 
+    /* IMPORTANT : Annule le transform (comme rotateY(180deg)) de la classe .card si elle est définie */
+    
+    /* Assure que la transition est toujours appliquée pour le survol JS */
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Cache le verso de la carte dans la collection, car seule la face avant est pertinente ici */
+.collection-grid .card-face.card-back {
+    display: none; 
+}
+
+/* S'assure que le recto est bien affiché, même s'il ne subit pas la rotation 3D standard */
+.collection-grid .card-face.card-front {
+    transform: rotateY(0deg); 
+}
+
 .collection-item {
     background: #333;
     padding: 10px;
