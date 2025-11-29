@@ -171,10 +171,10 @@ function displayCards(cards) {
         };
     
         // *** NOUVEAU : Gestion des effets visuels au survol ***
-        cardElement.addEventListener('mousemove', throttledMove);
+        cardElement.addEventListener('mousemove', handleCardMove);
         cardElement.addEventListener('mouseleave', handleCardLeave);
         // Pour le mobile :
-        cardElement.addEventListener('touchmove', throttledMove);
+        cardElement.addEventListener('touchmove', handleCardMove);
         cardElement.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
@@ -384,28 +384,4 @@ const card = event.currentTarget;
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
     card.style.transform = `perspective(1000px) ${flipRotation} scale(1)`;
     card.style.boxShadow = '';
-}
-
-// Fonction utilitaire pour limiter la fréquence d'appel d'une fonction
-function throttle(func, limit) {
-    let lastFunc;
-    let lastRan;
-    return function() {
-        const context = this;
-        const args = arguments;
-        if (!lastRan) {
-            // Exécution immédiate lors du premier appel
-            func.apply(context, args);
-            lastRan = Date.now();
-        } else {
-            // Planification du prochain appel
-            clearTimeout(lastFunc);
-            lastFunc = setTimeout(function() {
-                if ((Date.now() - lastRan) >= limit) {
-                    func.apply(context, args);
-                    lastRan = Date.now();
-                }
-            }, limit - (Date.now() - lastRan));
-        }
-    }
 }
