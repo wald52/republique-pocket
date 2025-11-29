@@ -346,7 +346,7 @@ function handleCardMove(event) {
     
     // 3. Application de la transformation
     // Note : On utilise la transformation 'translateZ' pour l'effet 3D de pop-out
-    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1)`;
     
     // Ajout d'un effet de lumière (optionnel)
     const lightX = center_x * -50 + 50; // Position du spot lumineux (0-100%)
@@ -380,7 +380,7 @@ const card = event.currentTarget;
     
     // *** LIGNE CORRIGÉE : On ajoute flipRotation ***
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
-    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1)`;
     card.style.boxShadow = '';
 
     // *** NOUVEAU : Réinitialise les variables CSS pour l'effet de brillance ***
