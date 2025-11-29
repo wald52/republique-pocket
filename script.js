@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnOpen.addEventListener('click', openBooster);
 });
 
-// Fonction pour charger et transformer les données de clean_data.json
+// Fonction pour charger et transformer les données de clean_data2.json
 async function loadAidsData() {
     try {
-        const response = await fetch('clean_data.json');
+        const response = await fetch('clean_data2.json');
         if (!response.ok) {
             throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         }
@@ -75,7 +75,7 @@ async function loadAidsData() {
 
     } catch (error) {
         console.error("Impossible de charger les données :", error);
-        revealArea.innerHTML = "<p style='color:white'>Erreur de chargement des données. Vérifiez que clean_data.json est bien présent.</p>";
+        revealArea.innerHTML = "<p style='color:white'>Erreur de chargement des données. Vérifiez que clean_data2.json est bien présent.</p>";
     }
 }
 
