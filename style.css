@@ -131,11 +131,48 @@ h2 { font-size: 1rem; color: #ddd; }
     padding: 0 5px;
 }
 
+/* Styles généraux pour les fonds des cartes */
+.card-face.card-front {
+    background-color: #f0f0f0; /* Fond par défaut (commun) */
+    background-image: linear-gradient(to bottom right, #f8f8f8, #e0e0e0);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pour espacer le contenu */
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden; /* Important pour les effets de brillance */
+    border: 1px solid #ddd;
+}
+
 /* Rarity Colors */
 .rarity-1 { border-color: #bdc3c7; } /* Grey */
-.rarity-2 { border-color: #27ae60; } /* Green */
-.rarity-3 { border-color: #9b59b6; box-shadow: 0 0 15px rgba(155, 89, 182, 0.6); } /* Purple */
-.rarity-4 { border-color: #f1c40f; box-shadow: 0 0 25px rgba(241, 196, 15, 0.8); background: linear-gradient(135deg, #fff, #fef9e7); } /* Gold */
+/* Rareté Peu Commune (2) - Vert/Bleu clair */
+.rarity-2 {
+    background-color: #a3e0a3; 
+    background-image: linear-gradient(to bottom right, #e6ffe6, #a3e0a3);
+    border-color: #6fb06f;
+}
+/* Rareté Rare (3) - Violet/Bleu */
+.rarity-3 {
+    background-color: #a0a0ff;
+    background-image: linear-gradient(to bottom right, #e0e0ff, #a0a0ff);
+    border-color: #6a6ad6;
+}
+/* Rareté Légendaire (4) - Orange/Or avec plus de brillance */
+.rarity-4 {
+    background-color: #ffcc00;
+    background-image: linear-gradient(to bottom right, #fff59d, #ffcc00);
+    border-color: #d4a700;
+    /* Ajoute un glow subtil pour les légendaires */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 .card-image { font-size: 3rem; margin-bottom: 10px; }
 
@@ -337,4 +374,55 @@ button.btn-action:hover { background-color: #a01e23; }
 
 body.modal-open {
     overflow: hidden;
+}
+
+/* style.css - À ajouter à la fin */
+
+/* Conteneur pour l'effet de brillance */
+.card-face.card-front {
+    position: relative; /* Important pour positionner les effets enfants */
+    overflow: hidden; /* Cache ce qui dépasse de la carte */
+}
+
+/* Effet de brillance principal (pour Rareté 3 et 4) */
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%; /* Plus large pour couvrir la carte */
+    height: 200%;
+    background: radial-gradient(
+        circle at var(--mouse-x) var(--mouse-y), 
+        rgba(255, 255, 255, 0.4) 0%, /* Zone centrale brillante */
+        rgba(255, 255, 255, 0) 70%   /* Devient transparent */
+    );
+    opacity: 0; /* Par défaut invisible */
+    transition: opacity 0.3s ease; /* Transition douce */
+    pointer-events: none; /* Ne bloque pas les clics sur la carte */
+    z-index: 1; /* Au-dessus du fond, mais sous le contenu de la carte */
+}
+
+/* Quand la souris est dessus, l'effet apparaît */
+.card-face.card-front:hover .card-glow {
+    opacity: 1;
+}
+
+/* Effets supplémentaires pour les Légendaires (4) - plus intense */
+.rarity-4 .card-glow {
+    background: radial-gradient(
+        circle at var(--mouse-x) var(--mouse-y), 
+        rgba(255, 255, 255, 0.6) 0%, 
+        rgba(255, 255, 255, 0) 80%   
+    );
+}
+
+/* Styles pour le titre et la description afin qu'ils soient au-dessus des effets */
+.card-title, .card-image, .card-desc, .card-stats {
+    position: relative; /* Pour qu'ils soient au-dessus du glow */
+    z-index: 2; /* S'assure qu'ils sont au-dessus de .card-glow */
+}
+
+/* Pour le modal, pas d'effets de survol */
+.full-card .card-glow {
+    opacity: 0 !important;
 }
