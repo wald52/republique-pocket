@@ -14,14 +14,12 @@ const btnOpen = document.getElementById('btn-open');
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', async () => {
-    // On désactive le bouton le temps du chargement
     btnOpen.disabled = true;
     btnOpen.textContent = "Chargement des aides...";
 
     await loadAidsData(); // Chargement des données réelles
     updateCollectionUI();
     
-    // Réactivation du bouton
     btnOpen.disabled = false;
     btnOpen.textContent = "Ouvrir un dossier";
 
@@ -40,38 +38,31 @@ async function loadAidsData() {
         
         // On transforme les résultats bruts en "Cartes" pour le jeu
         aidsDatabase = data.results.map(aid => {
-            // 1. Nettoyage de la description (enlever les balises HTML <p>, <ul>, etc.)
             const tmpDiv = document.createElement("div");
             tmpDiv.innerHTML = aid.description;
             let cleanDesc = tmpDiv.textContent || tmpDiv.innerText || "";
             
-            // NOUVEAU : Nettoyage du texte des motifs indésirables ("🚩" et tirets)
-            
-            // a. Supprimer le motif "🚩" et tout espace blanc/saut de ligne qui le suit
+            // Nettoyage du texte des motifs indésirables ("🚩" et tirets)
             cleanDesc = cleanDesc.replace(/🚩\s*/g, ''); 
-            
-            // b. Supprimer les longues lignes de tirets bas (50 ou plus) et les espaces/sauts de ligne autour
-            // On remplace par un espace unique pour ne pas coller le début et la fin s'ils existaient.
             cleanDesc = cleanDesc.replace(/[\s\r\n]*_{50,}[\s\r\n]*/g, ' ').trim();
 
-            // 2. Détermination de la catégorie principale pour l'emoji
+            // *** IMPORTANT ***
+            // Nous ne tronquons plus la description ici, pour que le modal utilise le texte complet.
+            // Le CSS s'occupera de la troncature pour l'affichage miniature.
+
             const categoryString = (aid.categories && aid.categories.length > 0) 
                 ? aid.categories[0] 
                 : "Autre";
             
-            // 3. Génération des stats de jeu (Gamification)
             const rarity = determineRarity(); 
             const cost = Math.floor(Math.random() * 200) + 10;
             const budget = Math.floor(Math.random() * 5000000) + 10000; 
 
-            // 4. On coupe la description pour l'affichage
-            cleanDesc = cleanDesc.substring(0, 180) + (cleanDesc.length > 180 ? "..." : "");
-
-
             return {
                 id: aid.id.toString(),
                 name: aid.name,
-                description: cleanDesc,
+                // Stocke la description complète et nettoyée
+                description: cleanDesc, 
                 category: categoryString,
                 cost: cost,
                 budget: budget,
@@ -91,10 +82,10 @@ async function loadAidsData() {
 // Fonction utilitaire pour attribuer une rareté aléatoire (Poids de tirage)
 function determineRarity() {
     const rand = Math.random() * 100;
-    if (rand < 60) return 1;       // Commune
-    else if (rand < 85) return 2;  // Peu Commune
-    else if (rand < 98) return 3;  // Rare
-    else return 4;                 // Légendaire
+    if (rand < 60) return 1;
+    else if (rand < 85) return 2;
+    else if (rand < 98) return 3;
+    else return 4;
 }
 
 // Fonction utilitaire pour attribuer un emoji selon la catégorie
@@ -110,10 +101,10 @@ function getCategoryEmoji(categoryStr) {
     if (cat.includes("numérique") || cat.includes("tech")) return "💻";
     if (cat.includes("urbanisme") || cat.includes("logement")) return "🏗️";
     if (cat.includes("entreprise") || cat.includes("économi")) return "💼";
-    return "🏛️"; // Emoji par défaut (Administration)
+    return "🏛️";
 }
 
-// Fonction d'ouverture de booster
+// Fonction d'ouverture de booster (Reste inchangée)
 function openBooster() {
     if (aidsDatabase.length === 0) {
         alert("Les données ne sont pas encore chargées.");
@@ -136,7 +127,7 @@ function openBooster() {
     }, 1000);
 }
 
-// Générer 5 cartes aléatoires
+// Générer 5 cartes aléatoires (Reste inchangée)
 function generateBoosterContent() {
     const boosterCards = [];
     
@@ -144,51 +135,45 @@ function generateBoosterContent() {
         const card = drawRandomCard();
         boosterCards.push(card);
         
-        // Ajouter à la collection utilisateur
         if (!userCollection[card.id]) {
             userCollection[card.id] = 0;
         }
         userCollection[card.id]++;
     }
     
-    // Sauvegarder
     localStorage.setItem('republicPocketCollection', JSON.stringify(userCollection));
     updateCollectionUI();
     
-    // Afficher les cartes
     displayCards(boosterCards);
 }
 
-// Tirer une carte au hasard dans la base chargée
+// Tirer une carte au hasard dans la base chargée (Reste inchangée)
 function drawRandomCard() {
-    // On détermine d'abord la rareté qu'on veut obtenir pour ce tirage
-    // Cela permet de garder la logique de "chance" même avec 3000 cartes
     const targetRarity = determineRarity();
-
-    // On filtre la base pour ne garder que les cartes de cette rareté
-    // (Note : comme on génère la rareté aléatoirement au chargement, la distribution est homogène)
     const pool = aidsDatabase.filter(aid => aid.rarity === targetRarity);
-    
-    // Sécurité si le pool est vide
     const finalPool = pool.length > 0 ? pool : aidsDatabase;
-
-    // On prend une carte au hasard dans ce sous-ensemble
     const randomIndex = Math.floor(Math.random() * finalPool.length);
     return finalPool[randomIndex];
 }
 
-// Affichage des cartes (Similaire à avant, mais adapté aux nouvelles données)
+// Affichage des cartes nouvellement tirées
 function displayCards(cards) {
     cards.forEach((card, index) => {
         const cardElement = document.createElement('div');
         cardElement.className = `card`;
         
-        // Effet de retournement au clic
-        cardElement.onclick = () => cardElement.classList.toggle('flipped');
+        // *** NOUVEAU *** : Attache l'événement pour ouvrir le modal
+        // On passe l'objet 'card' qui contient la description complète
+        cardElement.onclick = (e) => {
+            e.stopPropagation(); 
+            showFullCardDetails(card);
+        };
+        // *** FIN NOUVEAU ***
 
         // Délai d'apparition
         cardElement.style.animation = `fadeIn 0.5s ease forwards ${index * 0.2}s`;
 
+        // Note: La description affichée ici sera tronquée par le CSS
         cardElement.innerHTML = `
             <div class="card-face card-back">
                 RF
@@ -205,6 +190,7 @@ function displayCards(cards) {
         `;
         revealArea.appendChild(cardElement);
         
+        // Flip initial pour l'effet "wow"
         setTimeout(() => {
             cardElement.classList.add('flipped');
         }, 500 + (index * 300));
@@ -215,8 +201,6 @@ function displayCards(cards) {
 function updateCollectionUI() {
     collectionGrid.innerHTML = "";
     
-    // On n'affiche que les cartes possédées pour éviter d'afficher les 3000 vides
-    // Ou alors on affiche un résumé. Ici, affichons la liste des acquis.
     const ownedIds = Object.keys(userCollection);
     
     if (ownedIds.length === 0) {
@@ -224,17 +208,24 @@ function updateCollectionUI() {
         return;
     }
 
-    // Pour afficher les infos, on doit retrouver l'objet dans aidsDatabase
-    // Si la base n'est pas encore chargée (ex: chargement initial), on attend
     if (aidsDatabase.length === 0) return;
 
-    // On trie par nom pour que ce soit propre
-    const ownedCards = ownedIds.map(id => aidsDatabase.find(aid => aid.id === id)).filter(x => x !== undefined);
+    const ownedCards = ownedIds
+        .map(id => aidsDatabase.find(aid => aid.id === id))
+        .filter(x => x !== undefined);
     
     ownedCards.forEach(aid => {
         const count = userCollection[aid.id];
         const div = document.createElement('div');
-        div.className = `collection-item owned rarity-${aid.rarity}`; // Ajout classe rareté pour style
+        div.className = `collection-item owned rarity-${aid.rarity}`; 
+        
+        // *** NOUVEAU *** : Attache l'événement pour ouvrir le modal depuis la collection
+        div.onclick = (e) => {
+            e.stopPropagation();
+            showFullCardDetails(aid);
+        };
+        // *** FIN NOUVEAU ***
+
         div.innerHTML = `
             <span style="font-size:1.2rem">${aid.image}</span>
             <strong>${aid.name}</strong><br>
@@ -243,10 +234,58 @@ function updateCollectionUI() {
         collectionGrid.appendChild(div);
     });
     
-    // Ajout d'un compteur total
     const totalHeader = document.querySelector('.collection-section h3');
     if(totalHeader) totalHeader.innerText = `Votre Classeur (${ownedIds.length} aides uniques collectées)`;
 }
+
+
+// *** NOUVELLE FONCTION ***
+// Gère l'affichage de la carte agrandie (le modal)
+function showFullCardDetails(cardData) {
+    // Si un modal est déjà ouvert, on ne fait rien ou on le ferme d'abord (ici on suppose qu'il n'y en a qu'un)
+    if (document.getElementById('full-card-overlay')) return;
+
+    // 1. Création de l'overlay (fond noir transparent)
+    const overlay = document.createElement('div');
+    overlay.id = 'full-card-overlay';
+    overlay.className = 'full-card-overlay';
+    
+    // 2. Création de la carte agrandie
+    const fullCard = document.createElement('div');
+    // On utilise les classes 'card' et 'rarity-X' pour garder le style de base
+    fullCard.className = `card full-card rarity-${cardData.rarity}`;
+
+    // On injecte le HTML de la carte agrandie (avec la description complète)
+    fullCard.innerHTML = `
+        <div class="card-face card-front full-card-content">
+            <span class="full-card-image">${cardData.image}</span>
+            <div class="full-card-title">${cardData.name}</div>
+            
+            <div class="full-card-desc-full">
+                ${cardData.description}
+            </div>
+            
+            <div class="full-card-stats">
+                <span>⚔️ Coût administratif: ${cardData.cost}</span>
+                <span>❤️ Budget estimé: ${formatBudget(cardData.budget)}</span>
+            </div>
+            <div class="full-card-category">Catégorie principale: ${cardData.category}</div>
+        </div>
+    `;
+
+    // 3. Assemblage et affichage
+    overlay.appendChild(fullCard);
+    document.body.appendChild(overlay);
+
+    // 4. Fermeture : Un clic sur l'overlay (à l'extérieur de la carte) ferme le modal
+    overlay.addEventListener('click', (e) => {
+        // e.target est l'élément sur lequel le clic a eu lieu
+        if (e.target === overlay) {
+            document.body.removeChild(overlay);
+        }
+    });
+}
+// *** FIN NOUVELLE FONCTION ***
 
 function formatBudget(num) {
     if (num >= 1000000000) return (num / 1000000000).toFixed(1) + " Md€";
