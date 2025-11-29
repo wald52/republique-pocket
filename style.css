@@ -137,9 +137,42 @@ h2 { font-size: 1rem; color: #ddd; }
 .rarity-4 { border-color: #f1c40f; box-shadow: 0 0 25px rgba(241, 196, 15, 0.8); background: linear-gradient(135deg, #fff, #fef9e7); } /* Gold */
 
 .card-image { font-size: 3rem; margin-bottom: 10px; }
-.card-title { font-weight: bold; font-size: 0.9rem; text-align: center; margin-bottom: 5px; }
+
+.card-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 5px;
+    
+    /* NOUVEAU : Gestion du débordement */
+    display: -webkit-box;           /* Nécessaire pour le clamp */
+    -webkit-line-clamp: 2;          /* Limite à 2 lignes maximum */
+    -webkit-box-orient: vertical;   /* Orientation verticale */
+    overflow: hidden;               /* Cache ce qui dépasse */
+    text-overflow: ellipsis;        /* Ajoute les '...' */
+    
+    /* Optionnel : fixe une hauteur minimale pour aligner toutes les cartes */
+    min-height: 2.2em;
+    line-height: 1.1em;
+}
+
+.card-desc {
+    font-size: 0.7rem;
+    text-align: center;
+    color: #555;
+    
+    /* Flex grow permet de prendre l'espace, mais on doit limiter le texte */
+    flex-grow: 1;
+    margin: 5px 0;
+    
+    /* NOUVEAU : Gestion du débordement */
+    display: -webkit-box;
+    -webkit-line-clamp: 5;          /* Limite à 5 lignes (ajustez ce chiffre si besoin) */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .card-stats { font-size: 0.7rem; width: 100%; display: flex; justify-content: space-between; margin-top: auto; border-top: 1px solid #eee; padding-top: 5px;}
-.card-desc { font-size: 0.7rem; text-align: center; color: #555; flex-grow: 1; }
 
 /* --- COLLECTION UI --- */
 .collection-section {
