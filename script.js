@@ -158,6 +158,7 @@ function drawRandomCard() {
 
 // Affichage des cartes nouvellement tirées
 function displayCards(cards) {
+    const throttledMove = throttle(handleCardMove, 16);
     // ... dans la fonction displayCards(cards)
     cards.forEach((card, index) => {
         const cardElement = document.createElement('div');
@@ -170,10 +171,10 @@ function displayCards(cards) {
         };
     
         // *** NOUVEAU : Gestion des effets visuels au survol ***
-        cardElement.addEventListener('mousemove', handleCardMove);
+        cardElement.addEventListener('mousemove', throttledMove);
         cardElement.addEventListener('mouseleave', handleCardLeave);
         // Pour le mobile :
-        cardElement.addEventListener('touchmove', handleCardMove);
+        cardElement.addEventListener('touchmove', throttledMove);
         cardElement.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
@@ -208,9 +209,11 @@ function displayCards(cards) {
 
 // Mise à jour de l'interface de collection
 function updateCollectionUI() {
+    
     collectionGrid.innerHTML = "";
     
     const ownedIds = Object.keys(userCollection);
+    const throttledMove = throttle(handleCardMove, 16);
     
     if (ownedIds.length === 0) {
         collectionGrid.innerHTML = "<p style='color:#888; width:100%; text-align:center;'>Votre classeur est vide.</p>";
@@ -236,10 +239,10 @@ function updateCollectionUI() {
         // *** FIN NOUVEAU ***
 
         // *** NOUVEAU : Gestion des effets visuels au survol ***
-        div.addEventListener('mousemove', handleCardMove);
+        div.addEventListener('mousemove', throttledMove);
         div.addEventListener('mouseleave', handleCardLeave);
         // Pour le mobile :
-        div.addEventListener('touchmove', handleCardMove);
+        div.addEventListener('touchmove', throttledMove);
         div.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
@@ -381,4 +384,28 @@ const card = event.currentTarget;
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
     card.style.transform = `perspective(1000px) ${flipRotation} scale(1)`;
     card.style.boxShadow = '';
+}
+
+// Fonction utilitaire pour limiter la fréquence d'appel d'une fonction
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            // Exécution immédiate lors du premier appel
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            // Planification du prochain appel
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    }
 }
