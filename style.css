@@ -217,9 +217,11 @@ button.btn-action {
     border: none;
     padding: 10px 20px;
     font-size: 1rem;
-    border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px #8B1A1E; /* Ombre plus foncée pour effet 3D */
+    transition: background-color 0.1s ease;
+    text-transform: uppercase;
 }
 
 button.btn-action:hover { background-color: #a01e23; }
