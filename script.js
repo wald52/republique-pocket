@@ -301,6 +301,7 @@ function showFullCardDetails(cardData) {
         // e.target est l'élément sur lequel le clic a eu lieu
         if (e.target === overlay) {
             document.body.removeChild(overlay);
+            document.body.classList.remove('modal-open');
         }
     });
 }
