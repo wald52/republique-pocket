@@ -158,22 +158,31 @@ function drawRandomCard() {
 
 // Affichage des cartes nouvellement tirées
 function displayCards(cards) {
+    // ... dans la fonction displayCards(cards)
     cards.forEach((card, index) => {
         const cardElement = document.createElement('div');
         cardElement.className = `card`;
-        
-        // *** NOUVEAU *** : Attache l'événement pour ouvrir le modal
-        // On passe l'objet 'card' qui contient la description complète
+    
+        // Attache l'événement de clic pour le modal
         cardElement.onclick = (e) => {
             e.stopPropagation(); 
             showFullCardDetails(card);
         };
+    
+        // *** NOUVEAU : Gestion des effets visuels au survol ***
+        cardElement.addEventListener('mousemove', handleCardMove);
+        cardElement.addEventListener('mouseleave', handleCardLeave);
+        // Pour le mobile :
+        cardElement.addEventListener('touchmove', handleCardMove);
+        cardElement.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
         // Délai d'apparition
         cardElement.style.animation = `fadeIn 0.5s ease forwards ${index * 0.2}s`;
-
-        // Note: La description affichée ici sera tronquée par le CSS
+    
+        // ... (Le innerHTML du cardElement reste inchangé) ...
+        // Note : Pensez à adapter l'innerHTML avec votre dernière version si elle a changé
+    
         cardElement.innerHTML = `
             <div class="card-face card-back">
                 RF
@@ -189,7 +198,7 @@ function displayCards(cards) {
             </div>
         `;
         revealArea.appendChild(cardElement);
-        
+    
         // Flip initial pour l'effet "wow"
         setTimeout(() => {
             cardElement.classList.add('flipped');
@@ -224,6 +233,14 @@ function updateCollectionUI() {
             e.stopPropagation();
             showFullCardDetails(aid);
         };
+        // *** FIN NOUVEAU ***
+
+        // *** NOUVEAU : Gestion des effets visuels au survol ***
+        div.addEventListener('mousemove', handleCardMove);
+        div.addEventListener('mouseleave', handleCardLeave);
+        // Pour le mobile :
+        div.addEventListener('touchmove', handleCardMove);
+        div.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
         div.innerHTML = `
@@ -292,4 +309,58 @@ function formatBudget(num) {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + " M€";
     if (num >= 1000) return (num / 1000).toFixed(1) + " k€";
     return num + " €";
+}
+
+// Fonction pour calculer et appliquer la rotation 3D
+function handleCardMove(event) {
+    const card = event.currentTarget; // La carte sur laquelle la souris est
+    const rect = card.getBoundingClientRect(); // Position et taille de la carte
+
+    // Calcule la position X et Y de la souris (ou du doigt) par rapport à la carte
+    let clientX, clientY;
+    if (event.touches) {
+        // Pour les appareils mobiles (touch)
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+    } else {
+        // Pour la souris
+        clientX = event.clientX;
+        clientY = event.clientY;
+    }
+
+    // 1. Calcul des coordonnées par rapport au centre de la carte (de -0.5 à 0.5)
+    // offsetX/Y : position de la souris dans la carte (0 à width/height)
+    const offsetX = clientX - rect.left;
+    const offsetY = clientY - rect.top;
+
+    // center_x / center_y : position relative au centre (de -0.5 à 0.5)
+    const center_x = (offsetX / rect.width) - 0.5; 
+    const center_y = (offsetY / rect.height) - 0.5;
+
+    // 2. Calcul de l'angle de rotation
+    // Plus la souris est à droite, plus rotateY doit être positif (et inversement).
+    // Plus la souris est en bas, plus rotateX doit être négatif (et inversement).
+    // On utilise 10 degrés maximum pour un effet subtil.
+    const rotateY = center_x * 20; // Multiplié par 20 (max 10 deg)
+    const rotateX = center_y * -20; // Négatif pour que le bas penche vers l'arrière
+
+    // 3. Application de la transformation
+    // Note : On utilise la transformation 'translateZ' pour l'effet 3D de pop-out
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    
+    // Ajout d'un effet de lumière (optionnel)
+    const lightX = center_x * -50 + 50; // Position du spot lumineux (0-100%)
+    const lightY = center_y * -50 + 50; 
+    card.style.boxShadow = `
+        ${-center_x * 10}px ${-center_y * 10}px 15px rgba(0, 0, 0, 0.5),
+        inset ${lightX}% ${lightY}% 50px rgba(255, 255, 255, 0.15)
+    `;
+}
+
+// Fonction pour réinitialiser la rotation
+function handleCardLeave(event) {
+    const card = event.currentTarget;
+    // Réinitialise la rotation, l'échelle et retire l'ombre dynamique
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    card.style.boxShadow = '';
 }
