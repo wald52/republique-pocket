@@ -216,3 +216,96 @@ button.btn-action {
 }
 
 button.btn-action:hover { background-color: #a01e23; }
+
+/* --- COMPORTEMENT EN MODE DÉTAIL (MODAL) --- */
+
+/* L'overlay de fond */
+.full-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Fond noir semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Assure qu'il est au-dessus de tout */
+    cursor: pointer; /* Indique qu'on peut cliquer pour fermer */
+}
+
+/* La carte agrandie */
+.full-card {
+    /* Augmente la taille et supprime les transformations 3D */
+    width: 350px !important; 
+    height: 550px !important;
+    transform: none !important; 
+    cursor: default; /* Arrête d'indiquer qu'on peut cliquer sur la carte elle-même */
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+    /* S'assurer que le contenu est bien visible */
+    padding: 15px; 
+    box-sizing: border-box;
+}
+
+/* Structure interne spécifique pour la carte agrandie */
+.full-card-content {
+    /* Ceci est le .card-front qui a pris l'espace */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%; /* Prend toute la hauteur du full-card */
+}
+
+/* Titre dans le modal: on annule la troncature */
+.full-card .card-title {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    min-height: unset !important;
+    /* Annulation des propriétés de clamp pour le titre */
+    display: block !important; 
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+}
+
+/* Image/Emoji dans le modal */
+.full-card-image {
+    font-size: 5rem;
+    margin: 10px 0 20px 0;
+}
+
+/* Description dans le modal: on annule la troncature */
+.full-card-desc-full {
+    font-size: 0.9rem;
+    text-align: justify;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    flex-grow: 1; 
+    overflow-y: auto; /* Permet le défilement si le texte est très long */
+    color: #333; /* Texte plus sombre pour lisibilité */
+    /* Annulation des propriétés de clamp pour la description */
+    display: block !important; 
+    -webkit-line-clamp: unset !important;
+    overflow: auto !important;
+    text-overflow: unset !important;
+}
+
+/* Statistiques et catégorie dans le modal */
+.full-card-stats {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 10px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #ddd;
+}
+
+.full-card-category {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
