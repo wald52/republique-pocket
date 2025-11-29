@@ -44,7 +44,15 @@ async function loadAidsData() {
             const tmpDiv = document.createElement("div");
             tmpDiv.innerHTML = aid.description;
             let cleanDesc = tmpDiv.textContent || tmpDiv.innerText || "";
-            cleanDesc = cleanDesc.substring(0, 120) + (cleanDesc.length > 120 ? "..." : "");
+            
+            // NOUVEAU : Nettoyage du texte des motifs indésirables ("🚩" et tirets)
+            
+            // a. Supprimer le motif "🚩" et tout espace blanc/saut de ligne qui le suit
+            cleanDesc = cleanDesc.replace(/🚩\s*/g, ''); 
+            
+            // b. Supprimer les longues lignes de tirets bas (50 ou plus) et les espaces/sauts de ligne autour
+            // On remplace par un espace unique pour ne pas coller le début et la fin s'ils existaient.
+            cleanDesc = cleanDesc.replace(/[\s\r\n]*_{50,}[\s\r\n]*/g, ' ').trim();
 
             // 2. Détermination de la catégorie principale pour l'emoji
             const categoryString = (aid.categories && aid.categories.length > 0) 
@@ -52,15 +60,16 @@ async function loadAidsData() {
                 : "Autre";
             
             // 3. Génération des stats de jeu (Gamification)
-            // Comme le JSON n'a pas de "rareté" ou de "coût", on les génère aléatoirement
-            // ou basés sur des mots clés pour rendre le jeu fun.
             const rarity = determineRarity(); 
-            const cost = Math.floor(Math.random() * 200) + 10; // Coût administratif (mana)
-            // On utilise un budget fictif si non présent, ou basé sur des montants s'ils existaient
+            const cost = Math.floor(Math.random() * 200) + 10;
             const budget = Math.floor(Math.random() * 5000000) + 10000; 
 
+            // 4. On coupe la description pour l'affichage
+            cleanDesc = cleanDesc.substring(0, 180) + (cleanDesc.length > 180 ? "..." : "");
+
+
             return {
-                id: aid.id.toString(), // On garde l'ID unique de l'API
+                id: aid.id.toString(),
                 name: aid.name,
                 description: cleanDesc,
                 category: categoryString,
