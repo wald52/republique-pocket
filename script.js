@@ -158,7 +158,6 @@ function drawRandomCard() {
 
 // Affichage des cartes nouvellement tirées
 function displayCards(cards) {
-    const throttledMove = throttle(handleCardMove, 16);
     // ... dans la fonction displayCards(cards)
     cards.forEach((card, index) => {
         const cardElement = document.createElement('div');
@@ -189,7 +188,7 @@ function displayCards(cards) {
                 RF
             </div>
             <div class="card-face card-front rarity-${card.rarity}">
-                <div class="card-title">${card.name}</div>
+                ${(card.rarity >= 3) ? '<div class="card-glow"></div>' : ''} <div class="card-title">${card.name}</div>
                 <div class="card-image">${card.image}</div>
                 <div class="card-desc">${card.description}</div>
                 <div class="card-stats">
@@ -247,9 +246,13 @@ function updateCollectionUI() {
         // *** FIN NOUVEAU ***
 
         div.innerHTML = `
-            <span style="font-size:1.2rem">${aid.image}</span>
-            <strong>${aid.name}</strong><br>
-            <small>Quantité : ${count}</small>
+            <div class="card-face card-front rarity-${aid.rarity}" style="transform: rotateY(180deg); position:relative;">
+                ${(aid.rarity >= 3) ? '<div class="card-glow"></div>' : ''}
+                <span class="card-image" style="font-size:1.2rem">${aid.image}</span>
+                <strong class="card-title">${aid.name}</strong><br>
+                <small>Quantité : ${count}</small>
+                </div>
+            <div class="card-face card-back" style="transform: rotateY(0deg);"></div>
         `;
         collectionGrid.appendChild(div);
     });
@@ -368,6 +371,17 @@ function handleCardMove(event) {
         ${-center_x * 10}px ${-center_y * 10}px 15px rgba(0, 0, 0, 0.5),
         inset ${lightX}% ${lightY}% 50px rgba(255, 255, 255, 0.15)
     `;
+
+    // *** NOUVEAU : Met à jour les variables CSS pour l'effet de brillance ***
+    // Seules les cartes rares (rareté 3 et 4) auront un effet de brillance dynamique
+    if (card.classList.contains('rarity-3') || card.classList.contains('rarity-4')) {
+        const glowElement = card.querySelector('.card-glow');
+        if (glowElement) {
+            // Positionne le centre de la brillance
+            glowElement.style.setProperty('--mouse-x', `${offsetX}px`);
+            glowElement.style.setProperty('--mouse-y', `${offsetY}px`);
+        }
+    }
 }
 
 // Fonction pour réinitialiser la rotation
@@ -384,4 +398,12 @@ const card = event.currentTarget;
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
     card.style.transform = `perspective(1000px) ${flipRotation} scale(1)`;
     card.style.boxShadow = '';
+
+    // *** NOUVEAU : Réinitialise les variables CSS pour l'effet de brillance ***
+    // (Non strictement nécessaire car l'opacité passe à 0, mais bonne pratique)
+    const glowElement = card.querySelector('.card-glow');
+    if (glowElement) {
+        glowElement.style.setProperty('--mouse-x', `50%`); // Revient au centre
+        glowElement.style.setProperty('--mouse-y', `50%`);
+    }
 }
