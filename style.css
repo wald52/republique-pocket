@@ -333,3 +333,7 @@ button.btn-action:hover { background-color: #a01e23; }
     color: #666;
     margin-top: 5px;
 }
+
+body.modal-open {
+    overflow: hidden;
+}
