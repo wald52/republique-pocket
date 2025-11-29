@@ -208,56 +208,41 @@ function displayCards(cards) {
 
 // Mise à jour de l'interface de collection
 function updateCollectionUI() {
-    
     collectionGrid.innerHTML = "";
     
-    const ownedIds = Object.keys(userCollection);
-    
-    if (ownedIds.length === 0) {
-        collectionGrid.innerHTML = "<p style='color:#888; width:100%; text-align:center;'>Votre classeur est vide.</p>";
-        return;
-    }
-
-    if (aidsDatabase.length === 0) return;
-
-    const ownedCards = ownedIds
-        .map(id => aidsDatabase.find(aid => aid.id === id))
-        .filter(x => x !== undefined);
-    
-    ownedCards.forEach(aid => {
-        const count = userCollection[aid.id];
-        const div = document.createElement('div');
-        div.className = `collection-item owned rarity-${aid.rarity}`; 
+    // Pour chaque aide disponible (y compris celles non acquises)
+    aidsDatabase.forEach(aid => {
+        const count = userCollection[aid.id] || 0;
         
-        // *** NOUVEAU *** : Attache l'événement pour ouvrir le modal depuis la collection
-        div.onclick = (e) => {
-            e.stopPropagation();
-            showFullCardDetails(aid);
-        };
-        // *** FIN NOUVEAU ***
+        // On n'affiche que les cartes possédées
+        if (count === 0) return; 
 
-        // *** NOUVEAU : Gestion des effets visuels au survol ***
+        const div = document.createElement('div');
+        
+        // CRITIQUE : Ajout de la classe 'card' pour hériter des styles 3D, mais sans 'flipped'
+        // 'collection-item owned' pour les styles de grille spécifiques
+        div.className = `card collection-item owned rarity-${aid.rarity}`; 
+        
+        // AJOUT DES LISTENERS (doit être fait ici)
+        
         div.addEventListener('mousemove', handleCardMove);
         div.addEventListener('mouseleave', handleCardLeave);
-        // Pour le mobile :
-        div.addEventListener('touchmove', handleCardMove);
-        div.addEventListener('touchend', handleCardLeave);
-        // *** FIN NOUVEAU ***
+        div.addEventListener('click', () => showFullCardDetails(aid));
 
+
+        // On construit la carte avec le recto visible. 
+        // Le verso (card-back) est inclus mais sera masqué en CSS pour la collection.
         div.innerHTML = `
-            <div class="card-face card-front rarity-${aid.rarity}" style="transform: rotateY(180deg); position:relative;">
-                ${(aid.rarity >= 3) ? '<div class="card-glow"></div>' : ''}
+            <div class="card-face card-front rarity-${aid.rarity}">
+                ${(aid.rarity >= 3) ? '<div class="card-glow"></div>' : ''} 
                 <span class="card-image" style="font-size:1.2rem">${aid.image}</span>
                 <strong class="card-title">${aid.name}</strong><br>
-                <small>Quantité : ${count}</small>
-                </div>
-            <div class="card-face card-back" style="transform: rotateY(0deg);"></div>
+                <small>Quantité : x${count}</small>
+            </div>
+            <div class="card-face card-back">RF</div> 
         `;
         collectionGrid.appendChild(div);
     });
-    
-    const totalHeader = document.querySelector('.collection-section h3');
-    if(totalHeader) totalHeader.innerText = `Votre Classeur (${ownedIds.length} aides uniques collectées)`;
 }
 
 
@@ -395,7 +380,7 @@ const card = event.currentTarget;
     
     // *** LIGNE CORRIGÉE : On ajoute flipRotation ***
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
-    card.style.transform = `perspective(1000px) ${flipRotation} scale(1)`;
+    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
     card.style.boxShadow = '';
 
     // *** NOUVEAU : Réinitialise les variables CSS pour l'effet de brillance ***
