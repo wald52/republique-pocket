@@ -259,6 +259,8 @@ function updateCollectionUI() {
 // *** NOUVELLE FONCTION ***
 // Gère l'affichage de la carte agrandie (le modal)
 function showFullCardDetails(cardData) {
+    // ... au début de showFullCardDetails
+    document.body.classList.add('modal-open');
     // Si un modal est déjà ouvert, on ne fait rien ou on le ferme d'abord (ici on suppose qu'il n'y en a qu'un)
     if (document.getElementById('full-card-overlay')) return;
 
@@ -344,6 +346,9 @@ function handleCardMove(event) {
     const rotateY = center_x * 20; // Multiplié par 20 (max 10 deg)
     const rotateX = center_y * -20; // Négatif pour que le bas penche vers l'arrière
 
+    // *** CORRECTION CRITIQUE ici : Ajout de la rotation de 180° si la carte est déjà retournée ***
+    let flipRotation = card.classList.contains('flipped') ? 'rotateY(180deg)' : 'rotateY(0deg)';
+
     // 3. Application de la transformation
     // Note : On utilise la transformation 'translateZ' pour l'effet 3D de pop-out
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
@@ -360,6 +365,10 @@ function handleCardMove(event) {
 // Fonction pour réinitialiser la rotation
 function handleCardLeave(event) {
     const card = event.currentTarget;
+
+    // *** CORRECTION CRITIQUE ici : Réinitialisation à 0 ou 180 degrés ***
+    let flipRotation = card.classList.contains('flipped') ? 'rotateY(180deg)' : 'rotateY(0deg)';
+    
     // Réinitialise la rotation, l'échelle et retire l'ombre dynamique
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
     card.style.boxShadow = '';
