@@ -149,24 +149,26 @@ h2 { font-size: 1rem; color: #ddd; }
     box-sizing: border-box;
     overflow: hidden; /* Important pour les effets de brillance */
     border: 1px solid #ddd;
+    position: relative;
 }
 
 /* Rarity Colors */
 .rarity-1 { border-color: #bdc3c7; } /* Grey */
 /* Rareté Peu Commune (2) - Vert/Bleu clair */
-.rarity-2 {
+.card-face.card-front.rarity-2 {
     background-color: #a3e0a3; 
     background-image: linear-gradient(to bottom right, #e6ffe6, #a3e0a3);
     border-color: #6fb06f;
 }
 /* Rareté Rare (3) - Violet/Bleu */
-.rarity-3 {
+.card-face.card-front.rarity-3 {
     background-color: #a0a0ff;
     background-image: linear-gradient(to bottom right, #e0e0ff, #a0a0ff);
     border-color: #6a6ad6;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6), 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /* Rareté Légendaire (4) - Orange/Or avec plus de brillance */
-.rarity-4 {
+.card-face.card-front.rarity-4 {
     background-color: #ffcc00;
     background-image: linear-gradient(to bottom right, #fff59d, #ffcc00);
     border-color: #d4a700;
