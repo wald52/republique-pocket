@@ -346,12 +346,16 @@ function handleCardMove(event) {
     const rotateY = center_x * 20; // Multiplié par 20 (max 10 deg)
     const rotateX = center_y * -20; // Négatif pour que le bas penche vers l'arrière
 
-    // *** CORRECTION CRITIQUE ici : Ajout de la rotation de 180° si la carte est déjà retournée ***
-    let flipRotation = card.classList.contains('flipped') ? 'rotateY(180deg)' : 'rotateY(0deg)';
-
+    // Détermine si la carte doit être retournée (180°) ou non (0°)
+    let flipRotation = 'rotateY(0deg)';
+    if (card.classList.contains('flipped')) {
+        flipRotation = 'rotateY(180deg)'; 
+    }
+    // Note : Le .collection-item est considéré comme non-retourné (0deg)
+    
     // 3. Application de la transformation
     // Note : On utilise la transformation 'translateZ' pour l'effet 3D de pop-out
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
     
     // Ajout d'un effet de lumière (optionnel)
     const lightX = center_x * -50 + 50; // Position du spot lumineux (0-100%)
@@ -364,12 +368,16 @@ function handleCardMove(event) {
 
 // Fonction pour réinitialiser la rotation
 function handleCardLeave(event) {
-    const card = event.currentTarget;
-
-    // *** CORRECTION CRITIQUE ici : Réinitialisation à 0 ou 180 degrés ***
-    let flipRotation = card.classList.contains('flipped') ? 'rotateY(180deg)' : 'rotateY(0deg)';
+const card = event.currentTarget;
     
-    // Réinitialise la rotation, l'échelle et retire l'ombre dynamique
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    // Détermine si la carte doit être retournée (180°) ou non (0°)
+    let flipRotation = 'rotateY(0deg)';
+    if (card.classList.contains('flipped')) {
+        flipRotation = 'rotateY(180deg)'; 
+    }
+    
+    // *** LIGNE CORRIGÉE : On ajoute flipRotation ***
+    // Réinitialise l'effet de mouvement tout en conservant l'état retourné
+    card.style.transform = `perspective(1000px) ${flipRotation} scale(1)`;
     card.style.boxShadow = '';
 }
