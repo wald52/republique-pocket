@@ -219,42 +219,57 @@ button.btn-action:hover { background-color: #a01e23; }
 
 /* --- COMPORTEMENT EN MODE DÉTAIL (MODAL) --- */
 
-/* L'overlay de fond */
+/* L'overlay de fond (Reste inchangé) */
 .full-card-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Fond noir semi-transparent */
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Assure qu'il est au-dessus de tout */
-    cursor: pointer; /* Indique qu'on peut cliquer pour fermer */
+    z-index: 1000;
+    cursor: pointer;
 }
 
-/* La carte agrandie */
+/* La carte agrandie (Reste inchangé) */
 .full-card {
-    /* Augmente la taille et supprime les transformations 3D */
     width: 350px !important; 
     height: 550px !important;
+    /* Annule la transformation 3D sur le conteneur principal */
     transform: none !important; 
-    cursor: default; /* Arrête d'indiquer qu'on peut cliquer sur la carte elle-même */
+    cursor: default;
     box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
-    /* S'assurer que le contenu est bien visible */
     padding: 15px; 
     box-sizing: border-box;
+    /* Important: Assure que les enfants (faces) ne sont plus gérés en 3D */
+    transform-style: flat !important; 
 }
 
-/* Structure interne spécifique pour la carte agrandie */
+/* NOUVEAU & ESSENTIEL : Annule les propriétés 3D sur la face de la carte */
+/* C'est la solution pour rendre le contenu visible. */
+.full-card .card-face {
+    /* Annule toute rotation héritée */
+    transform: none !important; 
+    /* S'assure que le contenu n'est pas caché par la règle de face cachée */
+    backface-visibility: visible !important; 
+    /* Réinitialise la position pour qu'elle soit dans le flux normal */
+    position: relative !important; 
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* Le reste des styles pour le contenu agrandi (full-card-content) */
+
 .full-card-content {
-    /* Ceci est le .card-front qui a pris l'espace */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: 100%; /* Prend toute la hauteur du full-card */
+    height: 100%;
 }
 
 /* Titre dans le modal: on annule la troncature */
@@ -284,8 +299,8 @@ button.btn-action:hover { background-color: #a01e23; }
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     flex-grow: 1; 
-    overflow-y: auto; /* Permet le défilement si le texte est très long */
-    color: #333; /* Texte plus sombre pour lisibilité */
+    overflow-y: auto;
+    color: #333;
     /* Annulation des propriétés de clamp pour la description */
     display: block !important; 
     -webkit-line-clamp: unset !important;
