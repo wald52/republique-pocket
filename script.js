@@ -212,7 +212,6 @@ function updateCollectionUI() {
     collectionGrid.innerHTML = "";
     
     const ownedIds = Object.keys(userCollection);
-    const throttledMove = throttle(handleCardMove, 16);
     
     if (ownedIds.length === 0) {
         collectionGrid.innerHTML = "<p style='color:#888; width:100%; text-align:center;'>Votre classeur est vide.</p>";
@@ -238,10 +237,10 @@ function updateCollectionUI() {
         // *** FIN NOUVEAU ***
 
         // *** NOUVEAU : Gestion des effets visuels au survol ***
-        div.addEventListener('mousemove', throttledMove);
+        div.addEventListener('mousemove', handleCardMove);
         div.addEventListener('mouseleave', handleCardLeave);
         // Pour le mobile :
-        div.addEventListener('touchmove', throttledMove);
+        div.addEventListener('touchmove', handleCardMove);
         div.addEventListener('touchend', handleCardLeave);
         // *** FIN NOUVEAU ***
 
