@@ -267,6 +267,10 @@ h2 { font-size: 1rem; color: #ddd; }
     cursor: pointer;
     /* Réinitialiser la marge pour éviter les superpositions si la marge de .card était trop grande */
     margin: 0;
+    /* 🎨 CORRECTION : Ajout des coins arrondis */
+    border-radius: 12px; /* Utilisez une valeur similaire à la carte */
+    /* Assurez-vous que l'arrière-plan de l'enfant ne dépasse pas du parent */
+    overflow: hidden;
 }
 
 /* Vous pourriez aussi ajouter un style au survol pour les .collection-item */
