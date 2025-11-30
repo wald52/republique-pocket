@@ -269,8 +269,7 @@ function showFullCardDetails(cardData) {
         <div class="card-face card-front full-card-content">
             <span class="full-card-image">${cardData.image}</span>
             <div class="full-card-title">${cardData.name}</div>
-            <div class="card-face card-front rarity-${aid.rarity}">
-            </div>
+            
             <div class="full-card-desc-full">
                 ${cardData.description}
             </div>
