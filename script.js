@@ -381,7 +381,7 @@ const card = event.currentTarget;
     
     // *** LIGNE CORRIGÉE : On ajoute flipRotation ***
     // Réinitialise l'effet de mouvement tout en conservant l'état retourné
-    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1)`;
+    card.style.transform = `perspective(1000px) ${flipRotation} rotateX(0deg) rotateY(0deg) scale(1)`;
     card.style.boxShadow = '';
 
     // *** NOUVEAU : Réinitialise les variables CSS pour l'effet de brillance ***
