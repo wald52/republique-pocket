@@ -174,7 +174,6 @@ h2 { font-size: 1rem; color: #ddd; }
     border-color: #f1c40f;
     /* Ajoute un glow subtil pour les légendaires */
     box-shadow: 0 0 25px rgba(241, 196, 15, 0.9), 0 0 10px rgba(255, 255, 255, 0.5);
-    background: linear-gradient(135deg, #fff, #fef9e7);
 }
 
 .card-image { font-size: 3rem; margin-bottom: 10px; }
