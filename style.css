@@ -164,16 +164,17 @@ h2 { font-size: 1rem; color: #ddd; }
 .card-face.card-front.rarity-3 {
     background-color: #a0a0ff;
     background-image: linear-gradient(to bottom right, #e0e0ff, #a0a0ff);
-    border-color: #6a6ad6;
-    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6), 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: #9b59b6;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.8), 0 0 5px rgba(155, 89, 182, 0.4);
 }
 /* Rareté Légendaire (4) - Orange/Or avec plus de brillance */
 .card-face.card-front.rarity-4 {
     background-color: #ffcc00;
     background-image: linear-gradient(to bottom right, #fff59d, #ffcc00);
-    border-color: #d4a700;
+    border-color: #f1c40f;
     /* Ajoute un glow subtil pour les légendaires */
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 25px rgba(241, 196, 15, 0.9), 0 0 10px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #fff, #fef9e7);
 }
 
 .card-image { font-size: 3rem; margin-bottom: 10px; }
@@ -481,4 +482,34 @@ body.modal-open {
 /* Pour le modal, pas d'effets de survol */
 .full-card .card-glow {
     opacity: 0 !important;
+}
+
+/* --- EFFET DE RÉFLET HOLOGRAPHIQUE (SCINTILLEMENT) --- */
+
+.card-holo-glare {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* Dégradé arc-en-ciel */
+    background: conic-gradient(
+        from 180deg at 50% 50%,
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000
+    );
+    opacity: 0.2; /* Très subtil, pour ne pas masquer la carte */
+    mix-blend-mode: color-dodge; /* Mode de fusion pour un effet lumineux */
+    pointer-events: none;
+    z-index: 2; /* Au-dessus du glow, mais sous le contenu */
+    /* On cache l'effet par défaut */
+    transform: rotate(0deg) scale(0); 
+    transition: transform 0.5s ease-out, opacity 0.3s; 
+}
+
+/* Appliquer et animer l'effet uniquement sur les cartes Légendaires (Rareté 4) au survol */
+.rarity-4 .card-face.card-front:hover .card-holo-glare {
+    opacity: 0.5; /* Rendu plus visible au survol */
+    /* Fait tourner le dégradé pour un effet dynamique de scintillement */
+    transform: rotate(360deg) scale(1.1);
+    transition: transform 1.5s linear, opacity 0.5s ease-in-out; 
 }
