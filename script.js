@@ -266,7 +266,7 @@ function showFullCardDetails(cardData) {
 
     // On injecte le HTML de la carte agrandie (avec la description complète)
     fullCard.innerHTML = `
-        <div class="card-face card-front full-card-content">
+        <div class="card-face card-front full-card-content rarity-${cardData.rarity}">
             <span class="full-card-image">${cardData.image}</span>
             <div class="full-card-title">${cardData.name}</div>
             
