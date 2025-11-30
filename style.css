@@ -406,6 +406,31 @@ body.modal-open {
     overflow: hidden;
 }
 
+/* style.css - Section MODAL STYLES */
+
+/* --- ENFORCEMENT DES COULEURS DE RARETÉ DANS LE MODAL --- */
+
+/* Rareté Peu Commune (2) - Re-application forcée */
+.full-card .card-face.card-front.rarity-2 {
+    background-color: #a3e0a3 !important; 
+    background-image: linear-gradient(to bottom right, #e6ffe6, #a3e0a3) !important;
+    border-color: #6fb06f !important;
+}
+
+/* Rareté Rare (3) - Re-application forcée */
+.full-card .card-face.card-front.rarity-3 {
+    background-color: #a0a0ff !important;
+    background-image: linear-gradient(to bottom right, #e0e0ff, #a0a0ff) !important;
+    border-color: #6a6ad6 !important;
+}
+
+/* Rareté Légendaire (4) - Re-application forcée */
+.full-card .card-face.card-front.rarity-4 {
+    background-color: #ffcc00 !important;
+    background-image: linear-gradient(to bottom right, #fff59d, #ffcc00) !important;
+    border-color: #d4a700 !important;
+}
+
 /* style.css - À ajouter à la fin */
 
 /* Conteneur pour l'effet de brillance */
