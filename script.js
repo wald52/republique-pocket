@@ -249,11 +249,11 @@ function updateCollectionUI() {
 // *** NOUVELLE FONCTION ***
 // Gère l'affichage de la carte agrandie (le modal)
 function showFullCardDetails(cardData) {
-    // ... au début de showFullCardDetails
-    document.body.classList.add('modal-open');
+
     // Si un modal est déjà ouvert, on ne fait rien ou on le ferme d'abord (ici on suppose qu'il n'y en a qu'un)
     if (document.getElementById('full-card-overlay')) return;
-
+    // ... au début de showFullCardDetails
+    document.body.classList.add('modal-open');
     // 1. Création de l'overlay (fond noir transparent)
     const overlay = document.createElement('div');
     overlay.id = 'full-card-overlay';
