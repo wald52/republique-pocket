@@ -322,6 +322,8 @@ button.btn-action:hover { background-color: #a01e23; }
     box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
     padding: 0; 
     border: none !important;
+    /* 🎨 CORRECTION : RESTAURATION des coins arrondis */
+    border-radius: 15px !important; /* <-- MODIFIÉ */
     /* Important: Assure que les enfants (faces) ne sont plus gérés en 3D */
     transform-style: flat !important; 
 }
@@ -339,7 +341,7 @@ button.btn-action:hover { background-color: #a01e23; }
     height: 100% !important;
 
     /* MODIFICATION : Supprimer la bordure et le rayon sur la face */
-    border-radius: 0 !important; /* Pour une transition plus douce si la carte ne prend pas le coin du conteneur */
+    border-radius: 15px !important; /* Pour une transition plus douce si la carte ne prend pas le coin du conteneur */
     border: none !important; 
     box-shadow: none !important; /* S'assurer qu'il n'y a pas d'ombre portée résiduelle */
 }
