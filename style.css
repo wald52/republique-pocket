@@ -259,7 +259,8 @@ h2 { font-size: 1rem; color: #ddd; }
 
 /* S'assure que le recto est bien affiché, même s'il ne subit pas la rotation 3D standard */
 .collection-grid .card-face.card-front {
-    transform: rotateY(0deg); 
+    transform: rotateY(0deg);
+    border: none !important;
 }
 
 .collection-item {
