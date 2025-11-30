@@ -188,7 +188,7 @@ function displayCards(cards) {
                 RF
             </div>
             <div class="card-face card-front rarity-${card.rarity}">
-                ${(card.rarity >= 3) ? '<div class="card-glow"></div>' : ''} <div class="card-title">${card.name}</div>
+                ${(card.rarity >= 3) ? '<div class="card-glow"></div>' : ''} <div class="card-holo-glare"></div> <div class="card-title">${card.name}</div>
                 <div class="card-image">${card.image}</div>
                 <div class="card-desc">${card.description}</div>
                 <div class="card-stats">
